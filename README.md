@@ -60,6 +60,42 @@ These visual cues suggest that the key discriminative features for our neural ne
      - Std:  `[R_std,  G_std,  B_std]`  
 
 ---
+## Class Imbalance Handling
+
+To address class imbalance in the dataset, we employed a **weighted cross-entropy loss** function. Class weights were computed based on the inverse frequency of each class in the training set, assigning higher weight to the minority class to ensure fairer learning.
+
+### Computing Class Weights
+
+We computed the weights as the inverse frequency of each class:
+
+| Class         | Frequency (train) | Weight (inverse freq) |
+|---------------|-------------------|-----------------------|
+| **0 (majority)** |       _n₀_         | 0.2494                |
+| **1 (minority)** |       _n₁_         | 0.7506                |
+
+These weights were then converted to a PyTorch tensor and passed to the `CrossEntropyLoss` criterion.
+
+### PyTorch Implementation
+
+```python
+import torch
+import torch.nn as nn
+
+# Example class weights
+class_weights = torch.tensor([0.2494, 0.7506], dtype=torch.float)
+
+# Move to GPU if available
+if torch.cuda.is_available():
+    class_weights = class_weights.cuda()
+
+# Define the loss criterion
+criterion = nn.CrossEntropyLoss(weight=class_weights)
+
+# In your training loop:
+# outputs = model(inputs)
+# loss = criterion(outputs, targets)
+# loss.backward()
+# optimizer.step()
 
 ## Benchmark Model and Performance
 
