@@ -96,7 +96,7 @@ criterion = nn.CrossEntropyLoss(weight=class_weights)
 # loss = criterion(outputs, targets)
 # loss.backward()
 # optimizer.step()
-
+```
 ## Benchmark Model and Performance
 
 ### ResNet-50
